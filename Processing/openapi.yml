@@ -1,0 +1,55 @@
+openapi: 3.0.0
+info:
+  description: This API provides event stats
+  version: "1.0.0"
+  title: Stats API
+  contact:
+    email: nlai15@my.bcit.ca
+
+paths:
+  /stats:
+    get:
+      summary: Gets the event stats
+      operationId: app.get_stats
+      description: Gets member check in and gym equipment use readings processsed statistics
+      responses:
+        '200':
+          description: Successfully returned a list of member check in and gym equipment events
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/ReadingStats'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+components:
+  schemas:
+    ReadingStats:
+      required:
+      - num_membercheckin_readings
+      - max_member_age_reading
+      - max_machine_name_reading
+      - num_gymequipmentuse_readings
+      properties:
+        num_membercheckin_readings:
+          type: integer
+          example: 500000
+        max_member_age_reading:
+          type: string
+          example: "20"
+        max_machine_name_reading:
+          type: string
+          example: "10"
+        num_gymequipmentuse_readings:
+          type: integer
+          example: 500000
+      type: object

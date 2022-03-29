@@ -1,0 +1,127 @@
+---
+openapi: 3.0.0
+info:
+  title: Gym api
+  description: This is a simple API
+  contact:
+    email: nlai15@my.bcit.ca
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: /
+tags:
+- name: gym devices
+  description: Checks if gym member has checked in or out and if a machine is in use or free
+paths:
+  /membercheckin:
+    get:
+      tags:
+        - gym devices
+      summary: gets new member checkin
+      operationId: app.get_member_checkin
+      description: Gets member check in readings added after a timestamp
+      parameters:
+        - name: index
+          in: query
+          description: Gets the member check in at the index in the event store
+          schema:
+            type: integer
+            example: 100
+      responses:
+        '200':
+          description: Successfully returned a list of membercheckin events
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/membercheckin'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /gymequipmentinuse:
+    get:
+      tags:
+        - gym devices
+      summary: gets new gym equipment in use
+      operationId: app.get_gym_equipment
+      description: Gets gym equipment readings added after a timestamp
+      parameters:
+        - name: index
+          in: query
+          description: Gets the gym equipment in use at the index in the event store
+          schema:
+            type: integer
+            example: 100
+      responses:
+        '200':
+          description: Successfully returned a list of gymequipment events
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/gymequipment'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+components:
+  schemas:
+    membercheckin:
+      required:
+      - member_id
+      - member_age
+      - member_name
+      - member_time_entered
+      type: object
+      properties:
+        member_id:
+          type: string
+          format: uuid
+        member_age:
+          type: string
+          example: "20"
+        member_name:
+          type: string
+          example: John
+        member_time_entered:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33Z'
+        trace_id:
+          type: string
+          example: "8061363130"
+    gymequipment:
+      required:
+      - machine_id
+      - machine_name
+      - machine_time_used
+      type: object
+      properties:
+        machine_id:
+          type: string
+          format: uuid
+        machine_name:
+          type: string
+          example: Bench
+        machine_time_used:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33Z'
+        trace_id:
+          type: string
+          example: "8061363130"

@@ -1,0 +1,88 @@
+2022-03-08 15:57:43,739 - basicLogger - INFO - Retrieving gym equipment usage at index 100
+2022-03-08 15:57:44,970 - basicLogger - ERROR - Could not find gym equipment in use at index 100
+2022-03-08 15:58:14,811 - basicLogger - INFO - Retrieving membercheckin at index 100
+2022-03-08 15:58:16,042 - basicLogger - ERROR - Could not find membercheckin at index 100
+2022-03-08 15:58:38,823 - basicLogger - INFO - Retrieving membercheckin at index 2
+2022-03-08 15:58:50,605 - basicLogger - INFO - Retrieving membercheckin at index 100
+2022-03-08 15:58:51,835 - basicLogger - ERROR - Could not find membercheckin at index 100
+2022-03-08 16:03:03,566 - basicLogger - INFO - Retrieving gym equipment usage at index 0
+2022-03-21 19:59:45,170 - basicLogger - INFO - Retrieving gym equipment usage at index 100
+2022-03-21 19:59:46,176 - basicLogger - ERROR - Could not find gym equipment in use at index 100
+2022-03-21 20:02:38,562 - basicLogger - INFO - Retrieving gym equipment usage at index 100
+2022-03-21 20:02:39,648 - basicLogger - ERROR - Could not find gym equipment in use at index 100
+2022-03-21 20:02:47,517 - basicLogger - INFO - Retrieving membercheckin at index 100
+2022-03-21 20:02:48,608 - basicLogger - ERROR - Could not find membercheckin at index 100
+2022-03-21 20:47:11,102 - basicLogger - INFO - Retrieving gym equipment usage at index 100
+2022-03-21 20:47:12,271 - basicLogger - ERROR - Could not find gym equipment in use at index 100
+2022-03-22 13:11:17,313 - basicLogger - INFO - Retrieving gym equipment usage at index 100
+2022-03-22 13:11:18,515 - basicLogger - ERROR - Could not find gym equipment in use at index 100
+2022-03-22 13:11:23,521 - basicLogger - INFO - Retrieving membercheckin at index 100
+2022-03-22 13:11:24,687 - basicLogger - ERROR - Could not find membercheckin at index 100
+2022-03-22 13:22:20,073 - basicLogger - INFO - Retrieving membercheckin at index 14
+2022-03-22 13:22:26,760 - basicLogger - INFO - Retrieving membercheckin at index 100
+2022-03-22 13:22:27,938 - basicLogger - ERROR - Could not find membercheckin at index 100
+2022-03-22 13:22:35,251 - basicLogger - INFO - Retrieving gym equipment usage at index 100
+2022-03-22 13:22:36,432 - basicLogger - ERROR - Could not find gym equipment in use at index 100
+2022-03-22 13:22:51,972 - basicLogger - INFO - Retrieving gym equipment usage at index 100
+2022-03-22 13:22:53,158 - basicLogger - ERROR - Could not find gym equipment in use at index 100
+2022-03-22 13:25:04,142 - basicLogger - INFO - Retrieving gym equipment usage at index 100
+2022-03-22 13:25:05,316 - basicLogger - ERROR - Could not find gym equipment in use at index 100
+2022-03-22 13:25:11,387 - basicLogger - INFO - Retrieving gym equipment usage at index 1
+2022-03-22 13:27:45,029 - basicLogger - INFO - Retrieving gym equipment usage at index 12
+2022-03-22 13:27:49,419 - basicLogger - INFO - Retrieving membercheckin at index 100
+2022-03-22 13:27:50,569 - basicLogger - ERROR - Could not find membercheckin at index 100
+2022-03-22 13:27:54,419 - basicLogger - INFO - Retrieving membercheckin at index 1000
+2022-03-22 13:27:55,570 - basicLogger - ERROR - Could not find membercheckin at index 1000
+2022-03-22 13:27:59,540 - basicLogger - INFO - Retrieving membercheckin at index 1
+2022-03-22 13:37:03,982 - basicLogger - INFO - Retrieving gym equipment usage at index 12
+2022-03-22 13:49:24,265 - basicLogger - INFO - Retrieving gym equipment usage at index 100
+2022-03-22 13:49:25,423 - basicLogger - ERROR - Could not find gym equipment in use at index 100
+2022-03-22 13:49:30,011 - basicLogger - INFO - Retrieving gym equipment usage at index 1
+2022-03-22 13:49:31,188 - basicLogger - ERROR - Could not find gym equipment in use at index 1
+2022-03-22 13:49:37,113 - basicLogger - INFO - Retrieving gym equipment usage at index 10
+2022-03-22 13:49:38,357 - basicLogger - ERROR - Could not find gym equipment in use at index 10
+2022-03-22 13:50:08,798 - basicLogger - INFO - Retrieving gym equipment usage at index 10
+2022-03-22 13:50:09,996 - basicLogger - ERROR - Could not find gym equipment in use at index 10
+2022-03-22 13:50:17,978 - basicLogger - INFO - Retrieving membercheckin at index 1
+2022-03-22 13:52:09,004 - basicLogger - INFO - Retrieving gym equipment usage at index 10
+2022-03-22 13:54:17,491 - basicLogger - INFO - Retrieving gym equipment usage at index 10
+2022-03-22 14:00:52,676 - basicLogger - INFO - Retrieving gym equipment usage at index 100
+2022-03-22 14:00:53,925 - basicLogger - ERROR - Could not find gym equipment in use at index 100
+2022-03-22 14:00:57,262 - basicLogger - INFO - Retrieving gym equipment usage at index 10
+2022-03-22 14:01:07,294 - basicLogger - INFO - Retrieving gym equipment usage at index 1
+2022-03-22 14:05:16,427 - basicLogger - INFO - Retrieving gym equipment usage at index 1
+2022-03-22 14:05:57,293 - basicLogger - INFO - Retrieving gym equipment usage at index 2
+2022-03-22 14:11:49,081 - basicLogger - INFO - Retrieving gym equipment usage at index 100
+2022-03-22 14:11:50,323 - basicLogger - ERROR - Could not find gym equipment in use at index 100
+2022-03-22 14:15:15,939 - basicLogger - INFO - Retrieving gym equipment usage at index 0
+2022-03-22 14:15:17,790 - basicLogger - INFO - Retrieving gym equipment usage at index 0
+2022-03-22 14:17:34,365 - basicLogger - INFO - Retrieving gym equipment usage at index 10
+2022-03-22 14:24:12,012 - basicLogger - INFO - Retrieving gym equipment usage at index 1
+2022-03-22 14:25:06,824 - basicLogger - INFO - Retrieving gym equipment usage at index 10
+2022-03-22 14:25:10,216 - basicLogger - INFO - Retrieving gym equipment usage at index 10
+2022-03-22 14:25:14,635 - basicLogger - INFO - Retrieving gym equipment usage at index 11
+2022-03-22 14:25:19,571 - basicLogger - INFO - Retrieving gym equipment usage at index 112
+2022-03-22 14:25:20,746 - basicLogger - ERROR - Could not find gym equipment in use at index 112
+2022-03-22 14:25:28,038 - basicLogger - INFO - Retrieving gym equipment usage at index 9
+2022-03-22 14:25:35,479 - basicLogger - INFO - Retrieving gym equipment usage at index 1
+2022-03-22 14:25:43,299 - basicLogger - INFO - Retrieving membercheckin at index 1
+2022-03-22 14:39:33,357 - basicLogger - INFO - Retrieving membercheckin at index 18
+2022-03-22 15:13:03,264 - basicLogger - INFO - Retrieving membercheckin at index 19
+2022-03-22 15:13:16,967 - basicLogger - INFO - Retrieving gym equipment usage at index 1
+2022-03-22 15:13:22,686 - basicLogger - INFO - Retrieving gym equipment usage at index 40
+2022-03-22 15:27:31,116 - basicLogger - INFO - Retrieving gym equipment usage at index 100
+2022-03-22 15:27:47,076 - basicLogger - INFO - Retrieving gym equipment usage at index 500
+2022-03-22 15:27:48,542 - basicLogger - ERROR - Could not find gym equipment in use at index 500
+2022-03-22 15:27:58,139 - basicLogger - INFO - Retrieving gym equipment usage at index 400
+2022-03-22 15:27:59,677 - basicLogger - ERROR - Could not find gym equipment in use at index 400
+2022-03-22 15:28:04,435 - basicLogger - INFO - Retrieving gym equipment usage at index 300
+2022-03-22 15:28:05,944 - basicLogger - ERROR - Could not find gym equipment in use at index 300
+2022-03-22 15:28:10,383 - basicLogger - INFO - Retrieving gym equipment usage at index 250
+2022-03-22 15:28:11,720 - basicLogger - ERROR - Could not find gym equipment in use at index 250
+2022-03-22 15:28:15,548 - basicLogger - INFO - Retrieving gym equipment usage at index 200
+2022-03-22 15:28:21,174 - basicLogger - INFO - Retrieving gym equipment usage at index 225
+2022-03-22 15:28:22,620 - basicLogger - ERROR - Could not find gym equipment in use at index 225
+2022-03-22 15:28:34,608 - basicLogger - INFO - Retrieving membercheckin at index 0
+2022-03-22 15:28:39,250 - basicLogger - INFO - Retrieving membercheckin at index 220
+2022-03-22 15:28:45,051 - basicLogger - INFO - Retrieving membercheckin at index 250
+2022-03-22 15:28:46,564 - basicLogger - ERROR - Could not find membercheckin at index 250

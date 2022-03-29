@@ -1,0 +1,9 @@
+version: 1
+eventstore1:
+  url: http://localhost:8090/readings/membercheckin
+eventstore2:
+  url: http://localhost:8090/readings/gymequipmentinuse
+events:
+  hostname: kafka-nicholas.eastus2.cloudapp.azure.com
+  port: 9092
+  topic: events

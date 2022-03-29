@@ -1,0 +1,93 @@
+---
+openapi: 3.0.0
+info:
+  title: Gym api
+  description: This is a simple API
+  contact:
+    email: nlai15@my.bcit.ca
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: /
+tags:
+- name: gym devices
+  description: Checks if gym member has checked in or out and if a machine is in use or free
+paths:
+  /readings/membercheckin:
+    post:
+      tags:
+      - gym devices
+      summary: reports if gym member has checked in
+      description: Shows if a member has checked into the facility and adds a new gym member to the total capacity of the gym
+      operationId: app.report_member_checkin
+      requestBody:
+        description: search results matching criteria
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/membercheckin'
+      responses:
+        "201":
+          description: Member has checked in
+        "400":
+          description: Member has not checked in
+  /readings/gymequipmentinuse:
+    post:
+      tags:
+      - gym devices
+      summary: reports if gym equipment is in use
+      description: Adds the machine that is in use at the moment
+      operationId: app.report_gym_equipment
+      requestBody:
+        description: Machine not in use
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/gymequipment'
+      responses:
+        "201":
+          description: machine in use
+        "400":
+          description: invalid input, object invalid
+components:
+  schemas:
+    membercheckin:
+      required:
+      - member_id
+      - member_age
+      - member_name
+      - member_time_entered
+      type: object
+      properties:
+        member_id:
+          type: string
+          format: uuid
+        member_age:
+          type: string
+          example: "20"
+        member_name:
+          type: string
+          example: John
+        member_time_entered:
+          type: string
+          format: date-time
+          example: 2016-08-29T09:12:33.001Z
+    gymequipment:
+      required:
+      - machine_id
+      - machine_name
+      - machine_time_used
+      type: object
+      properties:
+        machine_id:
+          type: string
+          format: uuid
+        machine_name:
+          type: string
+          example: Bench
+        machine_time_used:
+          type: string
+          format: date-time
+          example: 2016-08-29T09:12:33.001Z
