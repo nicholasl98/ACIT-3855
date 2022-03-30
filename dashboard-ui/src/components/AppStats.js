@@ -39,8 +39,8 @@ export default function AppStats() {
 							<th>Gym Equipment In Use</th>
 						</tr>
 						<tr>
-							<td># BP: {stats['num_membercheckin_readings']}</td>
-							<td># HR: {stats['num_gymequipmentuse_readings']}</td>
+							<td># mc: {stats['num_membercheckin_readings']}</td>
+							<td># ge: {stats['num_gymequipmentuse_readings']}</td>
 						</tr>
 						<tr>
 							<td colspan="2">Oldest Member Age: {stats['max_member_age_reading']}</td>
