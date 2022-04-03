@@ -86,16 +86,16 @@ def report_gym_equipment(body):
     logger.debug(received_event)
 
 
-def get_member_checkin(timestamp, end_timestamp):
+def get_member_checkin(start_timestamp, end_timestamp):
     """ Gets new member check ins after the timestamp """
 
     session = DB_SESSION()
 
-    timestamp_datetime = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ")
+    start_timestamp_datetime = datetime.datetime.strptime(start_timestamp, "%Y-%m-%dT%H:%M:%SZ")
     end_timestamp_datetime = datetime.datetime.strptime(end_timestamp, "%Y-%m-%dT%H:%M:%SZ")
 
     readings = session.query(MemberCheckin).filter(
-        and_(MemberCheckin.date_created >= timestamp_datetime,
+        and_(MemberCheckin.date_created >= start_timestamp_datetime,
         MemberCheckin.date_created < end_timestamp_datetime) )
 
 
@@ -107,21 +107,21 @@ def get_member_checkin(timestamp, end_timestamp):
     session.close()
 
     logger.info("Query for member check in readings after %s returns %d results" %
-                (timestamp, len(results_list)))
+                (start_timestamp, len(results_list)))
 
     return results_list, 200
 
 
-def get_gym_equipment(timestamp, end_timestamp):
+def get_gym_equipment(start_timestamp, end_timestamp):
     """ Gets new gym equipment readings after the timestamp """
 
     session = DB_SESSION()
 
-    timestamp_datetime = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ")
+    start_timestamp_datetime = datetime.datetime.strptime(start_timestamp, "%Y-%m-%dT%H:%M:%SZ")
     end_timestamp_datetime = datetime.datetime.strptime(end_timestamp, "%Y-%m-%dT%H:%M:%SZ")
     
     readings = session.query(GymEquipment).filter(
-        and_(GymEquipment.date_created >= timestamp_datetime,
+        and_(GymEquipment.date_created >= start_timestamp_datetime,
         GymEquipment.date_created < end_timestamp_datetime) )
 
     results_list = []
@@ -132,7 +132,7 @@ def get_gym_equipment(timestamp, end_timestamp):
     session.close()
 
     logger.info("Query for gym equipment use readings after %s returns %d results" %
-                (timestamp, len(results_list)))
+                (start_timestamp, len(results_list)))
 
     return results_list, 200
 
