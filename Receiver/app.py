@@ -8,6 +8,7 @@ import datetime
 import json
 from pykafka import KafkaClient
 from connexion import NoContent
+from time import sleep
 
 with open('app_conf.yml', 'r') as f:
     app_config = yaml.safe_load(f.read())
@@ -23,6 +24,27 @@ with open('log_conf.yml', 'r') as f:
 
 
 logger = logging.getLogger('basicLogger')
+
+retry_count = 0
+""" Process event messages """ 
+hostname = "%s:%d" % (app_config["events"]["hostname"],   
+                        app_config["events"]["port"]) 
+
+while retry_count < app_config["kafka_connect"]["retry_count"]:
+    try:
+        logger.info('trying to connect, attemp: %d' % (retry_count))
+        print(hostname)
+        client = KafkaClient(hosts=hostname) 
+        topic = client.topics[str.encode(app_config['events']['topic'])] 
+        producer = topic.get_sync_producer() 
+    except:
+        logger.info('attempt %d failed, retry in 5 seoncds' % (retry_count))
+        retry_count += 1
+        sleep(app_config["kafka_connect"]["sleep_time"])
+    else:
+        break
+
+logger.info('connected to kafka')
 
 def report_member_checkin(body):
     headers = {"content-type": "application/json"}

@@ -887,3 +887,5 @@
 2022-03-22 15:26:43,346 - basicLogger - INFO - Returned event gymequipmentinuse reading response id:7926796888 reading with status 201
 2022-03-22 15:26:43,347 - basicLogger - INFO - Returned event gymequipmentinuse reading response id:3898116413 reading with status 201
 2022-03-22 15:26:43,347 - basicLogger - INFO - Returned event gymequipmentinuse reading response id:8642649190 reading with status 201
+2022-03-29 15:56:51,238 - basicLogger - INFO - Received event gymequipmentinuse reading with a trace id of 7662604746
+2022-03-29 15:56:51,933 - basicLogger - INFO - Returned event gymequipmentinuse reading response id:7662604746 reading with status 201
