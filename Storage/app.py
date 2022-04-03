@@ -16,6 +16,9 @@ from sqlalchemy.orm import sessionmaker
 from base import Base
 from member_checkin import MemberCheckin
 from gym_equipment import GymEquipment
+from sqlalchemy import and_
+from time import sleep
+
 
 
 with open('app_conf.yml', 'r') as f:
@@ -83,14 +86,18 @@ def report_gym_equipment(body):
     logger.debug(received_event)
 
 
-def get_member_checkin(timestamp):
+def get_member_checkin(timestamp, end_timestamp):
     """ Gets new member check ins after the timestamp """
 
     session = DB_SESSION()
 
     timestamp_datetime = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ")
+    end_timestamp_datetime = datetime.datetime.strptime(end_timestamp, "%Y-%m-%dT%H:%M:%SZ")
 
-    readings = session.query(MemberCheckin).filter(MemberCheckin.date_created >= timestamp_datetime)
+    readings = session.query(MemberCheckin).filter(
+        and_(MemberCheckin.date_created >= timestamp_datetime,
+        MemberCheckin.date_created < end_timestamp_datetime) )
+
 
     results_list = []
 
@@ -105,14 +112,17 @@ def get_member_checkin(timestamp):
     return results_list, 200
 
 
-def get_gym_equipment(timestamp):
+def get_gym_equipment(timestamp, end_timestamp):
     """ Gets new gym equipment readings after the timestamp """
 
     session = DB_SESSION()
 
     timestamp_datetime = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ")
-
-    readings = session.query(GymEquipment).filter(GymEquipment.date_created >= timestamp_datetime)
+    end_timestamp_datetime = datetime.datetime.strptime(end_timestamp, "%Y-%m-%dT%H:%M:%SZ")
+    
+    readings = session.query(GymEquipment).filter(
+        and_(GymEquipment.date_created >= timestamp_datetime,
+        GymEquipment.date_created < end_timestamp_datetime) )
 
     results_list = []
 
@@ -129,6 +139,18 @@ def get_gym_equipment(timestamp):
 def process_messages():
     """ Process event messages """
     hostname1 = "%s:%d" % (app_config["events"]["hostname"], app_config["events"]["port"])
+
+    while retry_count < app_config["kafka_connect"]["retry_count"]:
+        try:
+            logger.info('trying to connect, attemp: %d' % (retry_count))
+            print(hostname)
+            client = KafkaClient(hosts=hostname) 
+        except:
+            logger.info('attempt %d failed, retry in 5 seoncds' % (retry_count))
+            retry_count += 1
+            sleep(app_config["kafka_connect"]["sleep_time"])
+        else:
+            break
     client = KafkaClient(hosts=hostname1)
     topic = client.topics[str.encode(app_config["events"]["topic"])]
 
