@@ -48,10 +48,12 @@ def populate_stats():
     else:
         stats = results.to_dict()
 
-    previous_datetime = stats['last_updated']
+    start_timestamp= stats['last_updated']
+    current_timestamp = datetime.datetime.now()
+    end_timestamp = current_timestamp.strftime("%Y-%m-%dT%H:%M:%SZ")
 
-    get_membercheckin = requests.get(app_config['eventstore1']['url'] + '?timestamp=' + previous_datetime)
-    get_gymequipmentinuse = requests.get(app_config['eventstore2']['url'] + '?timestamp=' + previous_datetime)
+    get_membercheckin = requests.get(app_config['eventstore1']['url'] + '?start_timestamp=' + start_timestamp + "%end_timestamp=" + end_timestamp)
+    get_gymequipmentinuse = requests.get(app_config['eventstore2']['url'] + '?start_timestamp=' + start_timestamp + "%end_timestamp=" + end_timestamp)
 
     if get_membercheckin.status_code != 200:
         logger.error("Received a status code of {}".format(get_membercheckin.status_code))
