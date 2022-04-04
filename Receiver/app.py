@@ -56,7 +56,6 @@ def report_member_checkin(body):
     # response = requests.post(membercheckin_url, json=body, headers=headers)
     client = KafkaClient(hosts='{}:{}'.format(kafka_server, kafka_port))
     topic = client.topics[str.encode(tp)]
-    producer = topic.get_sync_producer()
     msg = {"type": "membercheckin",
            "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
            "payload": body}
@@ -79,7 +78,6 @@ def report_gym_equipment(body):
     # response = requests.post(gymequipmentinuse_url, json=body, headers=headers)
     client = KafkaClient(hosts='{}:{}'.format(kafka_server, kafka_port))
     topic = client.topics[str.encode(tp)]
-    producer = topic.get_sync_producer()
     msg = {"type": "gymequipmentinuse",
            "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
            "payload": body}
