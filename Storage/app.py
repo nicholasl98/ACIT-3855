@@ -137,8 +137,10 @@ def get_gym_equipment(start_timestamp, end_timestamp):
     return results_list, 200
 
 def process_messages():
+    retry_count = 0
     """ Process event messages """
-    hostname1 = "%s:%d" % (app_config["events"]["hostname"], app_config["events"]["port"])
+    hostname1 = "%s:%d" % (app_config["events"]["hostname"],   
+                          app_config["events"]["port"]) 
 
     while retry_count < app_config["kafka_connect"]["retry_count"]:
         try:
@@ -151,8 +153,9 @@ def process_messages():
             sleep(app_config["kafka_connect"]["sleep_time"])
         else:
             break
-    client = KafkaClient(hosts=hostname1)
-    topic = client.topics[str.encode(app_config["events"]["topic"])]
+    logger.info('connected to kafka')
+
+    topic = client.topics[str.encode(app_config["events"]["topic"])] 
 
     # Create a consumer on a consumer group, that only reads new messages
     # (uncommitted messages) when the service re-starts (i.e., it doesn't
