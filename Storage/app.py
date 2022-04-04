@@ -143,8 +143,8 @@ def process_messages():
     while retry_count < app_config["kafka_connect"]["retry_count"]:
         try:
             logger.info('trying to connect, attemp: %d' % (retry_count))
-            print(hostname)
-            client = KafkaClient(hosts=hostname) 
+            print(hostname1)
+            client = KafkaClient(hosts=hostname1)
         except:
             logger.info('attempt %d failed, retry in 5 seoncds' % (retry_count))
             retry_count += 1
