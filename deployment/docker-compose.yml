@@ -65,16 +65,13 @@ services:
   health: 
       image: health
       ports: 
-        - "8120" 
+        - "8120:8120" 
       depends_on:
         - "receiver"
         - "storage"
         - "processing"
         - "audit_log"
         - "dashboard"
-      volumes:
-        - /home/azureuser/config/health:/config
-        - /home/azureuser/logs:/logs
   db: 
     image: mysql:5.7 
     restart: always 
