@@ -106,8 +106,8 @@ def get_member_checkin(start_timestamp, end_timestamp):
 
     session.close()
 
-    logger.info("Query for member check in readings after %s returns %d results" %
-                (start_timestamp, len(results_list)))
+    logger.info("Query for member check in readings after %s and before %s returns %d results" %
+                (start_timestamp, end_timestamp, len(results_list)))
 
     return results_list, 200
 
@@ -131,8 +131,8 @@ def get_gym_equipment(start_timestamp, end_timestamp):
 
     session.close()
 
-    logger.info("Query for gym equipment use readings after %s returns %d results" %
-                (start_timestamp, len(results_list)))
+    logger.info("Query for gym equipment use readings after %s and before %s returns %d results" %
+                (start_timestamp, end_timestamp, len(results_list)))
 
     return results_list, 200
 
