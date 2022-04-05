@@ -7,6 +7,12 @@ info:
     email: nlai15@my.bcit.ca
 
 paths:
+  /health:
+    get:
+      operationId: app.health
+      responses:
+        '200':
+          description: service is running.
   /stats:
     get:
       summary: Gets the event stats

@@ -141,6 +141,10 @@ def init_scheduler():
     sched.add_job(populate_stats, 'interval', seconds=app_config['scheduler']['period_sec'])
     sched.start()
 
+def health():
+    logger.info('Processing service is running')
+
+    return NoContent, 200
 
 app = connexion.FlaskApp(__name__, specification_dir='')
 CORS(app.app) 
