@@ -1,4 +1,5 @@
 import connexion
+from connexion import NoContent
 import yaml
 import logging
 import logging.config
@@ -79,6 +80,9 @@ def get_gym_equipment(index):
     logger.error("Could not find gym equipment in use at index %d" % index)
     return {"message": "Not Found"}, 404
 
+def health():
+    logger.info('Audit service is running')
+    return NoContent, 200
 
 app = connexion.FlaskApp(__name__, specification_dir='')
 CORS(app.app) 
