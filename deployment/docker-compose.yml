@@ -79,7 +79,6 @@ services:
       volumes:
         - /home/azureuser/config/health:/config
         - /home/azureuser/logs:/logs
-        - processing-db:/data
   db: 
     image: mysql:5.7 
     restart: always 
