@@ -158,7 +158,7 @@ def init_scheduler():
     sched.start()
 
 def health():
-    logger.info('Processing service is running')
+    logger.info('Health service is running')
 
     return NoContent, 200
 
