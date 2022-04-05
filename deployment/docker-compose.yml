@@ -74,7 +74,7 @@ services:
         - "receiver"
         - "storage"
         - "processing"
-        - "audit"
+        - "audit_log"
         - "dashboard"
       volumes:
         - /home/azureuser/config/health:/config
