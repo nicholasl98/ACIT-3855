@@ -66,10 +66,6 @@ services:
       image: health
       ports: 
         - "8120" 
-      networks:
-        - "api.network"
-      environment:
-        - TARGET_ENV=test
       depends_on:
         - "receiver"
         - "storage"
