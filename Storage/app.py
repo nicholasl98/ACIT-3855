@@ -184,6 +184,11 @@ def process_messages():
         # Commit the new message as being read
         consumer.commit_offsets()
 
+def health():
+    logger.info('Storage service is running')
+
+    return NoContent, 200
+
 
 app = connexion.FlaskApp(__name__, specification_dir='')
 app.add_api("openapi.yaml", strict_validation=True, validate_responses=True)
