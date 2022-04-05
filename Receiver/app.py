@@ -88,6 +88,11 @@ def report_gym_equipment(body):
 
     return NoContent, 201
 
+def health():
+    logger.info('Receiver service is running')
+
+    return NoContent, 200
+
 
 app = connexion.FlaskApp(__name__, specification_dir='')
 app.add_api('openapi.yaml', strict_validation=True, validate_responses=True)

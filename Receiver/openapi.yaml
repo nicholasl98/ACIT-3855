@@ -15,6 +15,12 @@ tags:
 - name: gym devices
   description: Checks if gym member has checked in or out and if a machine is in use or free
 paths:
+  /health:
+    get:
+      operationId: app.health
+      responses:
+        '200':
+          description: service is running.
   /readings/membercheckin:
     post:
       tags:
