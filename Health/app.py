@@ -30,26 +30,6 @@ logger = logging.getLogger('basicLogger')
 
 
 
-def create_database():
-    conn = sqlite3.connect(app_config["datastore"]["filename"])
-
-    c = conn.cursor()
-    c.execute(''' 
-                  CREATE TABLE health 
-                  (id INTEGER PRIMARY KEY ASC,  
-                   receiver VARCHAR NOT NULL, 
-                   storage VARCHAR NOT NULL, 
-                   processing VARCHAR NOT NULL,
-                   audit VARCHAR NOT NULL,
-                   last_update VARCHAR(100) NOT NULL) 
-                  ''')
-
-    conn.commit()
-    conn.close()
-
-if not os.path.exists(app_config["datastore"]["filename"]):
-    create_database()
-
 DB_ENGINE = create_engine("sqlite:///%s" % app_config["datastore"]["filename"])
 Base.metadata.bind = DB_ENGINE
 DB_SESSION = sessionmaker(bind=DB_ENGINE)
@@ -163,9 +143,9 @@ def init_scheduler():
 
 
 app = connexion.FlaskApp(__name__, specification_dir='')
-app.add_api("healthApi.yml", base_path="/health", strict_validation=True, validate_responses=True)
 CORS(app.app)
 app.app.config['CORS_HEADERS'] = 'Content-Type'
+app.add_api("healthApi.yml", strict_validation=True, validate_responses=True)
 
 
 
