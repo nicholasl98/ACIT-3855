@@ -1,28 +1,27 @@
-import connexion
-from connexion import NoContent
-import json
-from datetime import datetime
-import os
-import os.path
-from os import path
+
 import requests
+import connexion
 import yaml
 import logging
 import logging.config
-import uuid
-import sqlite3
-
+import datetime
+import json
+import time
+from pykafka import KafkaClient
+from connexion import NoContent
+from apscheduler.schedulers.background import BackgroundScheduler
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from base import Base
-from health import Health as Health
-from apscheduler.schedulers.background import BackgroundScheduler
+from health import Health
 from flask_cors import CORS, cross_origin
+import os
+import sqlite3
 
 with open('app_conf.yml', 'r') as f:
     app_config = yaml.safe_load(f.read())
 
-# External Logging Configuration
+
 with open('log_conf.yml', 'r') as f:
     log_config = yaml.safe_load(f.read())
     logging.config.dictConfig(log_config)
@@ -31,140 +30,145 @@ logger = logging.getLogger('basicLogger')
 
 
 
-DB_ENGINE = create_engine("sqlite:///%s" % (app_config["datastore"]["filename"]))
-Base.metadata.bind = DB_ENGINE 
-DB_SESSION = sessionmaker(bind=DB_ENGINE)
+def create_database():
+    conn = sqlite3.connect(app_config["datastore"]["filename"])
 
-def create_tables():
-    conn = sqlite3.connect('health.sqlite') 
-    
-    c = conn.cursor() 
+    c = conn.cursor()
     c.execute(''' 
-            CREATE TABLE IF NOT EXISTS health 
-            (id INTEGER PRIMARY KEY ASC,  
-            receiver VARCHAR(50) NOT NULL, 
-            storage VARCHAR(50) NOT NULL, 
-            processing VARCHAR(50) NOT NULL, 
-            audit VARCHAR(50) NOT NULL, 
-            last_updated VARCHAR(100) NOT NULL) 
-            ''') 
-    
-    conn.commit() 
+                  CREATE TABLE health 
+                  (id INTEGER PRIMARY KEY ASC,  
+                   receiver VARCHAR NOT NULL, 
+                   storage VARCHAR NOT NULL, 
+                   processing VARCHAR NOT NULL,
+                   audit VARCHAR NOT NULL,
+                   last_update VARCHAR(100) NOT NULL) 
+                  ''')
+
+    conn.commit()
     conn.close()
 
-if path.exists(app_config["datastore"]["filename"]):
-    create_tables()
-    print('created db')
+if not os.path.exists(app_config["datastore"]["filename"]):
+    create_database()
 
-def populate():
-    logger.info('periodic health check started.')
-    session = DB_SESSION() 
-
-    readings = session.query(Health)
-    read_list = [] 
- 
-    for reading in readings: 
-        read_list.append(reading.to_dict()) 
-    
-    current_timestamp = datetime.strptime(str(datetime.now()),"%Y-%m-%d %H:%M:%S.%f").strftime("%Y-%m-%d %H:%M:%S.%f") 
-
-    headers = {"content-type": "application/json"}
-    receiver_response = requests.get(app_config['receiverHealth']['url'], headers=headers)
-    storage_response = requests.get(app_config['storageHealth']['url'], headers=headers)
-    processing_response = requests.get(app_config['processingHealth']['url'], headers=headers)
-    audit_response = requests.get(app_config['auditHealth']['url'], headers=headers)
+DB_ENGINE = create_engine("sqlite:///%s" % app_config["datastore"]["filename"])
+Base.metadata.bind = DB_ENGINE
+DB_SESSION = sessionmaker(bind=DB_ENGINE)
 
 
-    if receiver_response.status_code == 200:
-        receiver_status = 'Running'
-        logger.debug('Receiver service running')
-    else:
-        receiver_status = 'Down'
-        logger.debug('Receiver service  down')
+def populate_health():
+    logger.info("Start Periodic Health Check")
 
-    if storage_response.status_code == 200:
-        storage_status = 'Running'
-        logger.debug('Storage service running')
-    else:
-        storage_status = 'Down'
-        logger.debug('Storage service Down')
-
-    if processing_response.status_code == 200:
-        processing_status = 'Running'
-        logger.debug('Processing service running')
-    else:
-        processing_status = 'Down'
-        logger.debug('Processing service down')
-        
-    if audit_response.status_code == 200:
-        audit_status = 'Running'
-        logger.debug('Audit service running')
-    else:
-        audit_status = 'Down'
-        logger.debug('Audit service down')
-
-
-    
-    #input into SQLite
-    results_list= Health(receiver_status, 
-                storage_status, 
-                processing_status, 
-                audit_status, 
-                current_timestamp) 
-    session.add(results_list)  
-    session.commit() 
+    session = DB_SESSION()
+    results = session.query(Health).order_by(Health.last_update.desc()).first()
     session.close()
-    
-    logger.debug('updated this period: receiver status: %s, storage status: %s, processing status: %s, audit status: %s' 
-    % (receiver_status, storage_status, processing_response, audit_status))
-    logger.debug('periodic health check ended')
 
-    return NoContent, 200
+    if not results:
+        health = {
+            "receiver": "Running",
+            "storage": "Down",
+            "processing": "Running",
+            "audit": "Running",
+            "last_update": "2016-08-29T09:12:33Z"
+        }
+    else:
+        health = results.to_dict()
+
+    get_receiver_health = requests.get(app_config["receiver"]["url"], timeout=5)
+    get_storage_health = requests.get(app_config["storage"]["url"], timeout=5)
+    get_processing_health = requests.get(app_config["processing"]["url"], timeout=5)
+    get_audit_health = requests.get(app_config["audit_log"]["url"], timeout=5)
+
+    if get_receiver_health.status_code == 200:
+        logger.info("Receiver is running with a status code of {}".format(get_receiver_health.status_code))
+        receiver_status = "Running"
+        health['receiver_status'] = receiver_status
+    else:
+        logger.error("Receiver is not running.")
+        receiver_status = "Down"
+        health['receiver_status'] = receiver_status
+
+    if get_storage_health.status_code == 200:
+        logger.info("Storage is running with a status code of {}".format(get_storage_health.status_code))
+        storage_status = "Running"
+        health['storage_status'] = storage_status
+    else:
+        logger.error("Storage is not running.")
+        storage_status = "Down"
+        health['storage_status'] = storage_status
+
+    if get_processing_health.status_code == 200:
+        logger.info("Processing is running with a status code of {}".format(get_processing_health.status_code))
+        processing_status = "Running"
+        health['processing_status'] = processing_status
+    else:
+        logger.error("Processing is not running.")
+        processing_status = "Down"
+        health['processing_status'] = processing_status
+
+    if get_audit_health.status_code == 200:
+        logger.info("Audit is running with a status code of {}".format(get_audit_health.status_code))
+        audit_status = "Running"
+        health['audit_status'] = audit_status
+    else:
+        logger.error("Audit is not running.")
+        audit_status = "Down"
+        health['audit_status'] = audit_status
+
+    timestamp = datetime.datetime.now()
+    current_timestamp = timestamp.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    session = DB_SESSION()
+
+    health_new = Health(health["receiver_status"],
+                      health["storage_status"],
+                      health["processing_status"],
+                      health["audit_status"],
+                      timestamp)
+
+    session.add(health_new)
+
+    session.commit()
+    session.close()
+
 
 def get_health():
-    logger.info('get health status started')
+    logger.info("Request has started")
 
-    session = DB_SESSION() 
+    session = DB_SESSION()
+    results = session.query(Health).order_by(Health.last_update.desc()).first()
+    session.close()
 
-    readings = session.query(Health)
-    read_list = [] 
+    if not results:
+        health = {
+            "receiver": "Running",
+            "storage": "Down",
+            "processing": "Running",
+            "audit": "Running",
+            "last_update": "2016-08-29T09:12:33Z"
+        }
+    else:
+        health = results.to_dict()
 
-    if not readings:
-        return NoContent, 404
+    logger.debug(health)
 
-    for reading in readings: 
-        read_list.append(reading.to_dict())
+    logger.info("Request has completed")
+
+    return health, 200
 
 
-    latest = read_list[len(read_list)-1]
- 
-    pydict = {'receiver': latest['receiver'], 'storage': latest['storage'],
-    'processing': latest['processing'], 'audit': latest['audit'], 'last_updated': latest['last_updated']
-    }
-
-    logger.debug(pydict)
-    logger.info('get health completed')
-        
- 
-    session.close() 
-    return pydict, 200
-
-def init_scheduler(): 
-    sched = BackgroundScheduler(daemon=True) 
-    sched.add_job(populate,    
-                  'interval', 
-                  seconds=app_config['scheduler']['period_sec']) 
+def init_scheduler():
+    sched = BackgroundScheduler(daemon=True)
+    sched.add_job(populate_health, 'interval', seconds=app_config['scheduler']['period_sec'])
     sched.start()
 
-def health():
-    logger.info('Health service is running')
-
-    return NoContent, 200
 
 app = connexion.FlaskApp(__name__, specification_dir='')
+app.add_api("openapi.yml", base_path="/health", strict_validation=True, validate_responses=True)
+CORS(app.app)
+app.app.config['CORS_HEADERS'] = 'Content-Type'
 
-app.add_api("healthApi.yml", base_path="/health", strict_validation=True, validate_responses=True)
+
 
 if __name__ == "__main__":
-        init_scheduler()
-        app.run(port=8120)
+    init_scheduler()
+    app.run(port=8120, use_reloader=False)

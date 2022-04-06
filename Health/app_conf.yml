@@ -3,11 +3,11 @@ datastore:
   filename: health.sqlite 
 scheduler: 
   period_sec: 5
-receiverHealth: 
+receiver: 
   url: http://kafka-nicholas.eastus2.cloudapp.azure.com:8080/health
-storageHealth: 
+storage: 
   url: http://kafka-nicholas.eastus2.cloudapp.azure.com:8090/health
-processingHealth: 
+processing: 
   url: http://kafka-nicholas.eastus2.cloudapp.azure.com:8100/health
-auditHealth: 
+audit_log: 
   url: http://kafka-nicholas.eastus2.cloudapp.azure.com/8110/health
