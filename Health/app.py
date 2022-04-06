@@ -163,7 +163,7 @@ def init_scheduler():
 
 
 app = connexion.FlaskApp(__name__, specification_dir='')
-app.add_api("openapi.yml", base_path="/health", strict_validation=True, validate_responses=True)
+app.add_api("healthApi.yml", base_path="/health", strict_validation=True, validate_responses=True)
 CORS(app.app)
 app.app.config['CORS_HEADERS'] = 'Content-Type'
 
