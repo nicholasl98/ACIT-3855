@@ -65,8 +65,7 @@ services:
   health: 
       image: health
       restart: always
-      ports:
-      - "8120:8120"
+      network_mode: "host"
       depends_on:
         - "receiver"
         - "storage"
