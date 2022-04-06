@@ -64,14 +64,14 @@ services:
       - "audit_log"
   health: 
       image: health
-      ports: 
-        - "8120:8120" 
+      restart: always
+      ports:
+      - "8120:8120"
       depends_on:
         - "receiver"
         - "storage"
         - "processing"
         - "audit_log"
-        - "dashboard"
   db: 
     image: mysql:5.7 
     restart: always 
