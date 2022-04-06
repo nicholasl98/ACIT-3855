@@ -10,4 +10,4 @@ storage:
 processing: 
   url: http://kafka-nicholas.eastus2.cloudapp.azure.com:8100/health
 audit_log: 
-  url: http://kafka-nicholas.eastus2.cloudapp.azure.com/8110/health
+  url: http://kafka-nicholas.eastus2.cloudapp.azure.com:8110/health
