@@ -52,10 +52,10 @@ def populate_health():
     else:
         health = results.to_dict()
 
-    get_receiver_health = requests.get(app_config["receiver"]["url"], timeout=5)
-    get_storage_health = requests.get(app_config["storage"]["url"], timeout=5)
-    get_processing_health = requests.get(app_config["processing"]["url"], timeout=5)
-    get_audit_health = requests.get(app_config["audit_log"]["url"], timeout=5)
+    get_receiver_health = requests.get(app_config["receiver"]["url"], timeout=5) == True
+    get_storage_health = requests.get(app_config["storage"]["url"], timeout=5) == True
+    get_processing_health = requests.get(app_config["processing"]["url"], timeout=5) == True
+    get_audit_health = requests.get(app_config["audit_log"]["url"], timeout=5) == True
 
 
 
