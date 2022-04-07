@@ -16,6 +16,7 @@ from health import Health
 from flask_cors import CORS, cross_origin
 import os
 import sqlite3
+from time import sleep
 
 with open('app_conf.yml', 'r') as f:
     app_config = yaml.safe_load(f.read())
@@ -32,6 +33,7 @@ logger = logging.getLogger('basicLogger')
 DB_ENGINE = create_engine("sqlite:///%s" % app_config["datastore"]["filename"])
 Base.metadata.bind = DB_ENGINE
 DB_SESSION = sessionmaker(bind=DB_ENGINE)
+
 
 
 def populate_health():
@@ -51,66 +53,105 @@ def populate_health():
         }
     else:
         health = results.to_dict()
+     
+    retry_count = 0
+    """ Process event messages """ 
+     
+                    
+    while retry_count < app_config["kafka_connect"]["retry_count"]:
+        try:
+            get_receiver_health = requests.get(app_config["receiver"]["url"], timeout=5)
+            logger.info('trying to connect, attempt: %d' % (retry_count))
+            print(get_receiver_health)
+            if get_receiver_health.status_code == 200:
+                logger.info("Receiver is running with a status code of {}".format(get_receiver_health.status_code))
+                receiver_status = "Running"
+                health['receiver_status'] = receiver_status
+        except:
+            logger.info('attempt %d failed, retry in 5 seoncds' % (retry_count))
+            retry_count += 1
+            logger.error("Receiver is not running.")
+            receiver_status = "Down"
+            health['receiver_status'] = receiver_status
+            sleep(app_config["kafka_connect"]["sleep_time"])
+        else:
+            break
 
-    get_receiver_health = requests.get(app_config["receiver"]["url"], timeout=5) == True
-    get_storage_health = requests.get(app_config["storage"]["url"], timeout=5) == True
-    get_processing_health = requests.get(app_config["processing"]["url"], timeout=5) == True
-    get_audit_health = requests.get(app_config["audit_log"]["url"], timeout=5) == True
 
+     
+    retry_count = 0
+    """ Process event messages """ 
+    
+                    
+    while retry_count < app_config["kafka_connect"]["retry_count"]:
+        try:
+            get_storage_health = requests.get(app_config["storage"]["url"], timeout=5) 
+            logger.info('trying to connect, attempt: %d' % (retry_count))
+            print(get_storage_health)
+            if get_storage_health.status_code == 200:
+                logger.info("Storage is running with a status code of {}".format(get_storage_health.status_code))
+                storage_status = "Running"
+                health['storage_status'] = storage_status
+        except:
+            logger.info('attempt %d failed, retry in 5 seoncds' % (retry_count))
+            retry_count += 1
+            logger.error("Storage is not running.")
+            storage_status = "Down"
+            health['storage_status'] = storage_status
+            sleep(app_config["kafka_connect"]["sleep_time"])
+            
+        else:
+            break
 
+    
+    retry_count = 0
 
-    if get_receiver_health.status_code == 200:
-        logger.info("Receiver is running with a status code of {}".format(get_receiver_health.status_code))
-        receiver_status = "Running"
-        health['receiver_status'] = receiver_status
-    elif get_receiver_health == False:
-        logger.error("Receiver is not running.")
-        receiver_status = "Down"
-        health['receiver_status'] = receiver_status
-    else:
-        logger.error("Receiver is not running.")
-        receiver_status = "Down"
-        health['receiver_status'] = receiver_status
+    """ Process event messages """ 
+    
+    while retry_count < app_config["kafka_connect"]["retry_count"]:
+        try:
+            get_processing_health = requests.get(app_config["processing"]["url"], timeout=5) 
+            logger.info('trying to connect, attempt: %d' % (retry_count))
+            print(get_processing_health)
+            if get_processing_health.status_code == 200:
+                logger.info("Processing is running with a status code of {}".format(get_processing_health.status_code))
+                processing_status = "Running"
+                health['processing_status'] = processing_status
+        except:
+            logger.info('attempt %d failed, retry in 5 seoncds' % (retry_count))
+            retry_count += 1
+            logger.error("Processing is not running.")
+            processing_status = "Down"
+            health['processing_status'] = processing_status
+            sleep(app_config["kafka_connect"]["sleep_time"])
+        else:
+            break
 
-    if get_storage_health.status_code == 200:
-        logger.info("Storage is running with a status code of {}".format(get_storage_health.status_code))
-        storage_status = "Running"
-        health['storage_status'] = storage_status
-    elif get_storage_health == False:
-        logger.error("Storage is not running.")
-        receiver_status = "Down"
-        health['storage_status'] = storage_status
-    else:
-        logger.error("Storage is not running.")
-        storage_status = "Down"
-        health['storage_status'] = storage_status
+    retry_count = 0
 
-    if get_processing_health.status_code == 200:
-        logger.info("Processing is running with a status code of {}".format(get_processing_health.status_code))
-        processing_status = "Running"
-        health['processing_status'] = processing_status
-    elif get_processing_health == False:
-        logger.error("Processing is not running.")
-        receiver_status = "Down"
-        health['processing_status'] = processing_status
-    else:
-        logger.error("Processing is not running.")
-        processing_status = "Down"
-        health['processing_status'] = processing_status
-
-    if get_audit_health.status_code == 200:
-        logger.info("Audit is running with a status code of {}".format(get_audit_health.status_code))
-        audit_status = "Running"
-        health['audit_status'] = audit_status
-    elif get_audit_health == False:
-        logger.error("Audit is not running.")
-        receiver_status = "Down"
-        health['audit_status'] = audit_status
-    else:
-        logger.error("Audit is not running.")
-        audit_status = "Down"
-        health['audit_status'] = audit_status
-
+    """ Process event messages """ 
+    
+                    
+    while retry_count < app_config["kafka_connect"]["retry_count"]:
+        try:
+            get_audit_health = requests.get(app_config["audit_log"]["url"], timeout=5) 
+            logger.info('trying to connect, attempt: %d' % (retry_count))
+            print(get_audit_health)
+            if get_audit_health.status_code == 200:
+                logger.info("Audit is running with a status code of {}".format(get_audit_health.status_code))
+                audit_status = "Ru"
+                health['audit_status'] = audit_status
+        except:
+            logger.info('attempt %d failed, retry in 5 seoncds' % (retry_count))
+            retry_count += 1
+            logger.error("Audit is not running.")
+            audit_status = "Down"
+            health['audit_status'] = audit_status
+            sleep(app_config["kafka_connect"]["sleep_time"])
+        else:
+            break
+   
+   
     timestamp = datetime.datetime.now()
     current_timestamp = timestamp.strftime("%Y-%m-%dT%H:%M:%SZ")
 
