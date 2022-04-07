@@ -1,4 +1,3 @@
-from blinker import receiver_connected
 import connexion
 from connexion import NoContent
 import json
