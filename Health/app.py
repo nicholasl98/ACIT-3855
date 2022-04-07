@@ -116,6 +116,7 @@ def populate():
             logger.debug('service is down')
             break
             
+            
 
 
     
@@ -177,7 +178,7 @@ def health():
 
 app = connexion.FlaskApp(__name__, specification_dir='')
 
-app.add_api("healthApi.yml", base_path="/health", strict_validation=True, validate_responses=True)
+app.add_api("healthApi.yml", strict_validation=True, validate_responses=True)
 
 if __name__ == "__main__":
         init_scheduler()
