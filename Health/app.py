@@ -1,3 +1,4 @@
+from blinker import receiver_connected
 import connexion
 from connexion import NoContent
 import json
@@ -12,13 +13,13 @@ import logging.config
 import uuid
 import sqlite3
 
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from base import Base
 from health import Health as Health
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask_cors import CORS, cross_origin
-from time import sleep
 
 with open('app_conf.yml', 'r') as f:
     app_config = yaml.safe_load(f.read())
@@ -69,54 +70,66 @@ def populate():
     
     current_timestamp = datetime.strptime(str(datetime.now()),"%Y-%m-%d %H:%M:%S.%f").strftime("%Y-%m-%d %H:%M:%S.%f") 
 
-    logger.info
+    headers = {"content-type": "application/json"}
+    receiver_response = requests.get(app_config['receiverHealth']['url'], headers=headers)
+    storage_response = requests.get(app_config['storageHealth']['url'], headers=headers)
+    processing_response = requests.get(app_config['processingHealth']['url'], headers=headers)
+    audit_response = requests.get(app_config['auditHealth']['url'], headers=headers)
 
-    retry_count = 0
+    if receiver_response.status_code == 111:
+        receiver_status = 'Down'
+        logger.debug('Receiver service  down')
+    elif receiver_response.status_code == 404:
+        receiver_status = 'Down'
+        logger.debug('Receiver service  down')
+    elif receiver_response.status_code == 200:
+        receiver_status = 'Running'
+        logger.debug('Receiver service running')
+    else:
+        receiver_status = 'Down'
+        logger.debug('Receiver service  down')
 
-    while retry_count < app_config["kafka_connect"]["retry_count"]:
-        try:
-            headers = {"content-type": "application/json"}
-            receiver_response = requests.get(app_config['receiverHealth']['url'], headers=headers)
-            storage_response = requests.get(app_config['storageHealth']['url'], headers=headers)
-            processing_response = requests.get(app_config['processingHealth']['url'], headers=headers)
-            audit_response = requests.get(app_config['auditHealth']['url'], headers=headers)
-            
-            if receiver_response.status_code == 200:
-                receiver_status = 'Running'
-                logger.debug('Receiver service running')
-            else:
-                receiver_status = 'Down'
-                logger.debug('Receiver service down')
 
-            if storage_response.status_code == 200:
-                storage_status = 'Running'
-                logger.debug('Storage service running')
-            else:
-                storage_status = 'Down'
-                logger.debug('Storage service Down')
+    if storage_response.status_code == 111:
+        receiver_status = 'Down'
+        logger.debug('Storage service  down')
+    elif storage_response.status_code == 404:
+        receiver_status = 'Down'
+        logger.debug('Storage service Down')
+    elif storage_response.status_code == 200:
+        storage_status = 'Running'
+        logger.debug('Storage service running')
+    else:
+        storage_status = 'Down'
+        logger.debug('Storage service Down')
 
-            if processing_response.status_code == 200:
-                processing_status = 'Running'
-                logger.debug('Processing service running')
-            else:
-                processing_status = 'Down'
-                logger.debug('Processing service down')
-        
-            if audit_response.status_code == 200:
-                audit_status = 'Running'
-                logger.debug('Audit service running')
-            else:
-                audit_status = 'Down'
-                logger.debug('Audit service down')
-        except:
-            logger.info('attempt %d failed, retry in 5 seoncds' % (retry_count))
-            retry_count += 1
-            sleep(app_config["kafka_connect"]["sleep_time"])
-        else:
-            logger.debug('service is down')
-            break
-            
-            
+
+    if processing_response.status_code == 111:
+        receiver_status = 'Down'
+        logger.debug('Processing service down')
+    elif processing_response.status_code == 404:
+        receiver_status = 'Down'
+        logger.debug('Processing service down')
+    elif processing_response.status_code == 200:
+        processing_status = 'Running'
+        logger.debug('Processing service running')
+    else:
+        processing_status = 'Down'
+        logger.debug('Processing service down')
+    
+
+    if audit_response.status_code == 111:
+        receiver_status = 'Down'
+        logger.debug('Audit service down')
+    elif audit_response.status_code == 404:
+        receiver_status = 'Down'
+        logger.debug('Audit service down')
+    elif audit_response.status_code == 200:
+        audit_status = 'Running'
+        logger.debug('Audit service running')
+    else:
+        audit_status = 'Down'
+        logger.debug('Audit service down')
 
 
     
