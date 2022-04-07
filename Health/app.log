@@ -1304,3 +1304,9 @@
 2022-04-07 14:00:25,013 - basicLogger - ERROR - Storage is not running.
 2022-04-07 14:00:32,404 - basicLogger - INFO - attempt 0 failed, retry in 5 seoncds
 2022-04-07 14:00:32,404 - basicLogger - ERROR - Processing is not running.
+2022-04-07 14:00:39,969 - basicLogger - INFO - attempt 1 failed, retry in 5 seoncds
+2022-04-07 14:00:39,969 - basicLogger - ERROR - Processing is not running.
+2022-04-07 14:00:47,369 - basicLogger - INFO - attempt 0 failed, retry in 5 seoncds
+2022-04-07 14:00:47,370 - basicLogger - ERROR - Audit is not running.
+2022-04-07 14:00:54,947 - basicLogger - INFO - attempt 1 failed, retry in 5 seoncds
+2022-04-07 14:00:54,948 - basicLogger - ERROR - Audit is not running.

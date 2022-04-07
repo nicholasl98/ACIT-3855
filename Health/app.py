@@ -139,7 +139,7 @@ def populate_health():
             print(get_audit_health)
             if get_audit_health.status_code == 200:
                 logger.info("Audit is running with a status code of {}".format(get_audit_health.status_code))
-                audit_status = "Ru"
+                audit_status = "Running"
                 health['audit_status'] = audit_status
         except:
             logger.info('attempt %d failed, retry in 5 seoncds' % (retry_count))
