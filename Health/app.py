@@ -63,11 +63,7 @@ def populate_health():
         logger.info("Receiver is running with a status code of {}".format(get_receiver_health.status_code))
         receiver_status = "Running"
         health['receiver_status'] = receiver_status
-    elif get_receiver_health.status_code == 404:
-        logger.error("Receiver is not running.")
-        receiver_status = "Down"
-        health['receiver_status'] = receiver_status
-    elif get_receiver_health.status_code == 111:
+    elif get_receiver_health == False:
         logger.error("Receiver is not running.")
         receiver_status = "Down"
         health['receiver_status'] = receiver_status
@@ -80,11 +76,7 @@ def populate_health():
         logger.info("Storage is running with a status code of {}".format(get_storage_health.status_code))
         storage_status = "Running"
         health['storage_status'] = storage_status
-    elif get_storage_health.status_code == 404:
-        logger.error("Storage is not running.")
-        receiver_status = "Down"
-        health['storage_status'] = storage_status
-    elif get_storage_health.status_code == 111:
+    elif get_storage_health == False:
         logger.error("Storage is not running.")
         receiver_status = "Down"
         health['storage_status'] = storage_status
@@ -97,11 +89,7 @@ def populate_health():
         logger.info("Processing is running with a status code of {}".format(get_processing_health.status_code))
         processing_status = "Running"
         health['processing_status'] = processing_status
-    elif get_processing_health.status_code == 404:
-        logger.error("Processing is not running.")
-        receiver_status = "Down"
-        health['processing_status'] = processing_status
-    elif get_processing_health.status_code == 111:
+    elif get_processing_health == False:
         logger.error("Processing is not running.")
         receiver_status = "Down"
         health['processing_status'] = processing_status
@@ -114,11 +102,7 @@ def populate_health():
         logger.info("Audit is running with a status code of {}".format(get_audit_health.status_code))
         audit_status = "Running"
         health['audit_status'] = audit_status
-    elif get_audit_health.status_code == 404:
-        logger.error("Audit is not running.")
-        receiver_status = "Down"
-        health['audit_status'] = audit_status
-    elif get_audit_health.status_code == 111:
+    elif get_audit_health == False:
         logger.error("Audit is not running.")
         receiver_status = "Down"
         health['audit_status'] = audit_status
